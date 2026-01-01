@@ -1,104 +1,181 @@
-# 技术栈与构建系统
+# 技术栈和构建系统
 
-## 核心技术
+## 核心技术栈
 
-### 后端技术
-- **Python 3.8+**：主要开发语言
-- **Flask**：Web框架，用于Web界面
-- **SQLite**：本地数据库，存储学习数据和间隔重复
-- **pytest + Hypothesis**：测试框架，包含属性测试
+### 后端框架
+- **Python 3.8+** - 主要编程语言
+- **Flask 3.0+** - Web应用框架
+- **SQLite** - 轻量级数据库存储
+- **Werkzeug** - WSGI工具库
 
 ### 前端技术
-- **HTML/CSS/JavaScript**：Web界面（模板位于 `bilingual_tutor/web/templates/`）
-- **Flask模板**：使用Jinja2进行服务端渲染
-- **响应式设计**：支持移动端和桌面端
+- **HTML5/CSS3** - 响应式Web界面
+- **JavaScript (ES6+)** - 前端交互逻辑
+- **Bootstrap/自定义CSS** - 界面样式框架
 
-### 关键依赖库
-- **requests + BeautifulSoup4**：网页内容爬取
-- **dataclasses-json**：数据模型序列化
-- **flask-cors**：跨域资源共享
-- **lxml**：XML/HTML解析，用于内容提取
+### 数据处理
+- **BeautifulSoup4** - HTML解析和网页爬取
+- **lxml** - XML/HTML处理引擎
+- **requests** - HTTP请求库
 
-## 项目结构约定
+### 测试框架
+- **pytest** - 单元测试框架
+- **pytest-cov** - 测试覆盖率工具
+- **Hypothesis** - 属性测试库（Property-based testing）
 
-### 模块组织
-- `bilingual_tutor/core/`：中央学习引擎和协调
-- `bilingual_tutor/models.py`：所有数据模型和接口（单文件集中管理）
-- `bilingual_tutor/interfaces/`：中文本地化层
-- `bilingual_tutor/content/`：内容管理、爬取和过滤
-- `bilingual_tutor/progress/`：进度跟踪和时间规划
-- `bilingual_tutor/analysis/`：弱点分析和改进规划
-- `bilingual_tutor/storage/`：数据库和数据持久化
-- `bilingual_tutor/web/`：Flask Web应用
+### 安全和加密
+- **cryptography** - 加密算法库
+- **itsdangerous** - 安全令牌生成
+- **Flask-CORS** - 跨域资源共享
 
-### 测试策略
-- **属性测试**：使用Hypothesis进行30+个正确性属性验证
-- **94.4%测试通过率**：使用pytest进行全面测试覆盖
-- **测试标记**：`@pytest.mark.property`、`@pytest.mark.unit`、`@pytest.mark.integration`
+### 数据序列化
+- **dataclasses-json** - 数据类JSON序列化
+
+## 项目架构
+
+### 模块化设计
+```
+bilingual_tutor/
+├── core/           # 核心学习引擎
+├── interfaces/     # 中文界面层
+├── content/        # 内容管理层
+├── progress/       # 进度跟踪层
+├── analysis/       # 分析和规划层
+├── storage/        # 数据存储层
+├── audio/          # 音频处理层
+└── web/           # Web应用层
+```
+
+### 设计模式
+- **依赖注入** - 组件注册机制实现松耦合
+- **接口抽象** - 所有核心组件都有明确的接口定义
+- **工厂模式** - 动态创建学习活动和内容
+- **观察者模式** - 进度跟踪和事件通知
 
 ## 常用命令
 
-### 开发环境设置
+### 环境设置
 ```bash
+# 创建虚拟环境
+python -m venv .venv
+
+# 激活虚拟环境 (Windows)
+.venv\Scripts\activate
+
+# 激活虚拟环境 (macOS/Linux)
+source .venv/bin/activate
+
 # 安装依赖
 pip install -r requirements.txt
+```
 
+### 开发和测试
+```bash
 # 运行所有测试
 python -m pytest tests/ -v
 
-# 运行带覆盖率的测试
+# 运行测试并生成覆盖率报告
 python -m pytest tests/ --cov=bilingual_tutor --cov-report=html
 
-# 仅运行属性测试
+# 运行属性测试（包含长时间运行警告）
 python -m pytest tests/ -k "property" -v
-```
 
-### 运行应用
-```bash
-# 启动Web服务器
-cd bilingual_tutor/web
-python app.py
-
-# 访问地址：http://localhost:5000
-```
-
-### 测试命令
-```bash
 # 运行特定测试文件
 python -m pytest tests/test_core_engine.py -v
 
 # 运行集成测试
 python -m pytest tests/ -k "integration" -v
-
-# 生成覆盖率报告
-python -m pytest tests/ --cov=bilingual_tutor --cov-report=term-missing
 ```
 
-## 架构模式
+### Web应用
+```bash
+# 启动开发服务器
+cd bilingual_tutor/web
+python app.py
 
-### 组件注册模式
-- 中央`CoreLearningEngine`管理所有组件
-- 通过`register_component()`方法注册组件
-- 通过依赖注入实现松耦合
+# 启动生产服务器 (使用脚本)
+./start_server.sh    # Linux/macOS
+start_server.bat     # Windows
 
-### 基于接口的设计
-- 所有主要组件实现抽象基类
-- 在`models.py`中定义（如`LearningEngineInterface`、`ContentCrawlerInterface`）
+# 访问应用
+# 浏览器打开: http://localhost:5000
+```
 
-### 中文优先本地化
-- 所有面向用户的文本使用中文
-- 针对中文学习者的文化适配
-- 使用中文语音描述提供发音指导
+### 代码质量
+```bash
+# 代码格式化 (如果安装了black)
+black bilingual_tutor/
+
+# 代码风格检查 (如果安装了flake8)
+flake8 bilingual_tutor/
+
+# 类型检查 (如果安装了mypy)
+mypy bilingual_tutor/
+```
+
+### 数据库管理
+```bash
+# 数据库迁移 (如果需要)
+python bilingual_tutor/storage/migrate_database.py
+
+# 音频文件迁移
+python bilingual_tutor/storage/migrate_audio.py
+```
 
 ## 配置管理
 
-### 环境设置
-- 开发环境：`FLASK_ENV=development`
-- 生产环境：`FLASK_ENV=production`
-- 测试环境：`FLASK_ENV=testing`
+### 环境配置
+- **开发环境**: `DevelopmentConfig` - DEBUG=True
+- **生产环境**: `ProductionConfig` - DEBUG=False  
+- **测试环境**: `TestingConfig` - TESTING=True
 
-### 关键设置
-- 默认学习时间：60分钟
-- 复习时间比例：20%（固定要求）
-- 内容质量阈值：0.7
-- 间隔重复：SM-2算法实现
+### 配置文件
+- `config.py` - 主配置文件
+- `pytest.ini` - 测试配置
+- `requirements.txt` - 依赖包列表
+
+### 环境变量
+```bash
+# 设置Flask环境
+export FLASK_ENV=development  # 或 production, testing
+
+# 设置Flask应用
+export FLASK_APP=bilingual_tutor.web.app:app
+```
+
+## 部署要求
+
+### 系统要求
+- Python 3.8 或更高版本
+- 至少 2GB 可用内存
+- 稳定的网络连接（用于内容爬取）
+
+### 生产部署
+```bash
+# 使用Gunicorn (推荐)
+pip install gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 bilingual_tutor.web.app:app
+
+# 使用uWSGI
+pip install uwsgi
+uwsgi --http :5000 --module bilingual_tutor.web.app:app
+```
+
+## 开发规范
+
+### 代码风格
+- 遵循 PEP 8 Python代码规范
+- 使用类型注解 (Type Hints)
+- 函数和类必须有文档字符串
+- 面向用户功能的注释使用中文
+
+### 测试要求
+- 每个新功能都需要对应的单元测试
+- 关键功能需要属性测试 (Property-based tests)
+- 测试覆盖率目标: 85%+
+- 集成测试覆盖端到端流程
+
+### 提交规范
+- 提交信息使用中文
+- 每个提交应该是一个完整的功能单元
+- 重大更改需要更新相关文档

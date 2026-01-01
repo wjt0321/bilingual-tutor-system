@@ -1,8 +1,17 @@
+# 根目录 .gitignore - 用于kiro-config分支
+# 只同步 .kiro 目录到 kiro-config 分支
+
+# 排除bilingual-tutor-system整个目录
+bilingual-tutor-system/
+
+# 排除不需要同步的目录
+.hypothesis/
+.vscode/
+
 # Security and Privacy - Keep local only
 .kiro/steering/security.md
 
 # IDE and Editor files
-.vscode/
 .idea/
 *.swp
 *.swo
