@@ -1,0 +1,18 @@
+# Security and Privacy - Keep local only
+.kiro/steering/security.md
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
