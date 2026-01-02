@@ -5,6 +5,7 @@
 bilingual-tutor-system/
 
 # 排除不需要同步的目录
+.trae/
 .hypothesis/
 .vscode/
 
