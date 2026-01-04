@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>离线模式 - 双语导师系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .offline-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px;
+        }
+
+        .offline-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .offline-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .offline-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .offline-message {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .offline-tips {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .offline-tips h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .offline-tips ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .offline-tips li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .offline-tips li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .offline-btn {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .offline-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .offline-btn:active {
+            transform: translateY(0);
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background: #10b981;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .offline-card {
+                padding: 24px;
+                border-radius: 16px;
+            }
+
+            .offline-icon {
+                font-size: 60px;
+            }
+
+            .offline-title {
+                font-size: 20px;
+            }
+
+            .offline-tips {
+                padding: 16px;
+            }
+
+            .offline-tips li {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-card">
+            <div class="offline-icon">📡</div>
+            <h1 class="offline-title">离线模式</h1>
+            <p class="offline-message">
+                您当前处于离线状态。别担心,您仍然可以访问已缓存的学习内容。
+            </p>
+            
+            <div class="offline-tips">
+                <h3>离线可用功能</h3>
+                <ul>
+                    <li>查看已学习的内容</li>
+                    <li>复习已缓存的词汇</li>
+                    <li>浏览离线学习资料</li>
+                    <li>查看学习进度和统计</li>
+                </ul>
+            </div>
+
+            <button class="offline-btn" onclick="window.location.reload()">
+                重新连接
+            </button>
+
+            <div class="connection-status">
+                <span class="status-dot"></span>
+                <span id="connection-text">等待网络连接...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statusDot = document.querySelector('.status-dot');
+        const connectionText = document.getElementById('connection-text');
+
+        function updateConnectionStatus() {
+            if (navigator.onLine) {
+                statusDot.classList.add('online');
+                connectionText.textContent = '网络已连接,正在刷新...';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                statusDot.classList.remove('online');
+                connectionText.textContent = '等待网络连接...';
+            }
+        }
+
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+
+        updateConnectionStatus();
+    </script>
+</body>
+</html>

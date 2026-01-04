@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX设计预览 - 双语导师系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="safe-area-wrapper">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="logo">🎓</span>
+                <span class="brand-text">双语导师系统</span>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard" class="nav-link active">
+                    <span class="nav-icon">📊</span>
+                    仪表板
+                </a>
+                <a href="#learn" class="nav-link">
+                    <span class="nav-icon">📚</span>
+                    学习
+                </a>
+                <a href="#practice" class="nav-link">
+                    <span class="nav-icon">✏️</span>
+                    练习
+                </a>
+                <a href="#settings" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    设置
+                </a>
+            </div>
+            <div class="nav-user">
+                <span class="user-name">学习者</span>
+                <button class="btn-logout">退出</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="breadcrumb">
+                <a href="#home" class="breadcrumb-item">首页</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">仪表板</span>
+            </div>
+
+            <div class="dashboard">
+                <div class="welcome-section">
+                    <div class="welcome-content">
+                        <h1>欢迎回来!</h1>
+                        <p class="welcome-subtitle">继续你的双语学习之旅</p>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <span class="stat-icon">📖</span>
+                            <span class="stat-label">词汇</span>
+                            <span class="stat-value">1,234</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">⏱️</span>
+                            <span class="stat-label">学习时长</span>
+                            <span class="stat-value">48h</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🎯</span>
+                            <span class="stat-label">准确率</span>
+                            <span class="stat-value">87%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="today-plan">
+                    <div class="section-header">
+                        <h2>今日学习计划</h2>
+                    </div>
+                    <div class="time-allocation">
+                        <div class="time-block review">
+                            <span class="stat-icon">🔄</span>
+                            <span class="stat-label">复习</span>
+                            <span class="stat-value">30分钟</span>
+                        </div>
+                        <div class="time-block english">
+                            <span class="stat-icon">🇬🇧</span>
+                            <span class="stat-label">英语</span>
+                            <span class="stat-value">45分钟</span>
+                        </div>
+                        <div class="time-block japanese">
+                            <span class="stat-icon">🇯🇵</span>
+                            <span class="stat-label">日语</span>
+                            <span class="stat-value">45分钟</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-cards-section">
+                    <div class="section-header">
+                        <h2>学习卡片</h2>
+                    </div>
+                    <div class="learning-cards">
+                        <div class="learning-card">
+                            <div class="learning-card-header">
+                                <span class="learning-card-badge english">英语</span>
+                            </div>
+                            <h3 class="learning-card-title">日常对话</h3>
+                            <p class="learning-card-description">学习日常生活中的英语对话表达,掌握基本的交流技巧</p>
+                            <div class="learning-card-meta">
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">📚</span>
+                                    <span>20个词汇</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">⏱️</span>
+                                    <span>15分钟</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">📈</span>
+                                    <span>中级</span>
+                                </div>
+                            </div>
+                            <button class="learning-card-action">开始学习</button>
+                        </div>
+
+                        <div class="learning-card">
+                            <div class="learning-card-header">
+                                <span class="learning-card-badge japanese">日语</span>
+                            </div>
+                            <h3 class="learning-card-title">基础语法</h3>
+                            <p class="learning-card-description">掌握日语的基础语法结构,理解句子构成</p>
+                            <div class="learning-card-meta">
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">📚</span>
+                                    <span>15个语法点</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">⏱️</span>
+                                    <span>20分钟</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">📈</span>
+                                    <span>初级</span>
+                                </div>
+                            </div>
+                            <button class="learning-card-action">开始学习</button>
+                        </div>
+
+                        <div class="learning-card">
+                            <div class="learning-card-header">
+                                <span class="learning-card-badge review">复习</span>
+                            </div>
+                            <h3 class="learning-card-title">词汇复习</h3>
+                            <p class="learning-card-description">复习之前学过的词汇,巩固记忆效果</p>
+                            <div class="learning-card-meta">
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">📚</span>
+                                    <span>50个词汇</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">⏱️</span>
+                                    <span>10分钟</span>
+                                </div>
+                                <div class="learning-card-meta-item">
+                                    <span class="learning-card-meta-icon">🔄</span>
+                                    <span>复习中</span>
+                                </div>
+                            </div>
+                            <button class="learning-card-action">开始复习</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <div class="section-header">
+                        <h2>互动练习</h2>
+                    </div>
+                    <div class="practice-container">
+                        <div class="practice-header">
+                            <h3 class="practice-title">选择题练习</h3>
+                            <div class="practice-counter">
+                                <span>第 1/10 题</span>
+                            </div>
+                        </div>
+                        <div class="practice-content">
+                            <p class="practice-question">请选择正确的英文翻译:</p>
+                            <p class="practice-question">"你好" 用英语怎么说?</p>
+                        </div>
+                        <div class="practice-options">
+                            <div class="practice-option">
+                                <div class="practice-option-radio"></div>
+                                <span class="practice-option-text">Goodbye</span>
+                            </div>
+                            <div class="practice-option selected">
+                                <div class="practice-option-radio"></div>
+                                <span class="practice-option-text">Hello</span>
+                            </div>
+                            <div class="practice-option">
+                                <div class="practice-option-radio"></div>
+                                <span class="practice-option-text">Thank you</span>
+                            </div>
+                            <div class="practice-option">
+                                <div class="practice-option-radio"></div>
+                                <span class="practice-option-text">Sorry</span>
+                            </div>
+                        </div>
+                        <div class="feedback-message success">
+                            <span class="feedback-icon">✅</span>
+                            <div class="feedback-content">
+                                <div class="feedback-title">回答正确!</div>
+                                <div class="feedback-text">"你好" 的英文翻译是 "Hello"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="section-header">
+                        <h2>学习进度</h2>
+                    </div>
+                    <div class="progress-demo">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                            <div>
+                                <h4 style="margin-bottom: 1rem;">线性进度条</h4>
+                                <div class="progress-linear" style="margin-bottom: 1rem;">
+                                    <div class="progress-linear-bar" style="width: 75%;"></div>
+                                </div>
+                                <div class="progress-linear" style="margin-bottom: 1rem;">
+                                    <div class="progress-linear-bar animated" style="width: 50%;"></div>
+                                </div>
+                                <div class="progress-linear">
+                                    <div class="progress-linear-bar progress-linear-striped" style="width: 90%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 1rem;">圆形进度</h4>
+                                <div class="progress-circular">
+                                    <svg viewBox="0 0 120 120">
+                                        <defs>
+                                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#3b82f6"/>
+                                                <stop offset="100%" style="stop-color:#6366f1"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="progress-circular-track" cx="60" cy="60" r="50"/>
+                                        <circle class="progress-circular-bar" cx="60" cy="60" r="50"
+                                                stroke-dasharray="314" stroke-dashoffset="78.5"/>
+                                    </svg>
+                                    <div class="progress-circular-value">75%</div>
+                                    <div class="progress-circular-label">完成度</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.practice-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

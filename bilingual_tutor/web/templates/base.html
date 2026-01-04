@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>{% block title %}双语导师系统{% endblock %}</title>
+    <meta name="description" content="个性化双语学习助手 - 英语和日语智能学习系统">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="双语导师">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">跳转到主要内容</a>
+    
+    <!-- Navigation -->
+    {% if is_authenticated %}
+    <nav class="navbar" role="navigation" aria-label="主导航">
+        <div class="nav-brand">
+            <span class="logo" role="img" aria-label="书本图标">📚</span>
+            <span class="brand-text">双语导师</span>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('main.index') }}" 
+               class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}"
+               aria-current="{% if request.endpoint == 'main.index' %}page{% endif %}">
+                <span class="nav-icon" role="img" aria-label="首页图标">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="{{ url_for('main.learn_page') }}" 
+               class="nav-link {% if request.endpoint == 'main.learn_page' %}active{% endif %}"
+               aria-current="{% if request.endpoint == 'main.learn_page' %}page{% endif %}">
+                <span class="nav-icon" role="img" aria-label="学习图标">📖</span>
+                <span>学习</span>
+            </a>
+            <a href="{{ url_for('main.progress_page') }}" 
+               class="nav-link {% if request.endpoint == 'main.progress_page' %}active{% endif %}"
+               aria-current="{% if request.endpoint == 'main.progress_page' %}page{% endif %}">
+                <span class="nav-icon" role="img" aria-label="进度图标">📊</span>
+                <span>进度</span>
+            </a>
+            <a href="{{ url_for('main.settings_page') }}" 
+               class="nav-link {% if request.endpoint == 'main.settings_page' %}active{% endif %}"
+               aria-current="{% if request.endpoint == 'main.settings_page' %}page{% endif %}">
+                <span class="nav-icon" role="img" aria-label="设置图标">⚙️</span>
+                <span>设置</span>
+            </a>
+        </div>
+        <div class="nav-user">
+            <span class="user-name">
+                <span role="img" aria-label="用户图标">👤</span> 
+                {{ user_id }}
+            </span>
+            <button class="btn-logout" onclick="BilingualTutor.logout()" aria-label="退出登录">
+                退出
+            </button>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <p>© {{ current_year }} 双语导师系统 v{{ app_version }} | 个人学习专用</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/mobile.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    
+    <!-- Service Worker Registration for PWA capabilities -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/static/js/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                        registration.onupdatefound = function() {
+                            const installingWorker = registration.installing;
+                            installingWorker.onstatechange = function() {
+                                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('New content is available; please refresh.');
+                                    if (window.confirm('有新版本可用,是否刷新页面?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            };
+                        };
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+            
+            navigator.serviceWorker.addEventListener('controllerchange', function() {
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

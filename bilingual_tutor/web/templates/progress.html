@@ -1,0 +1,627 @@
+{% extends "base.html" %}
+
+{% block title %}进度报告 - 双语导师系统{% endblock %}
+
+{% block content %}
+<div class="progress-page">
+    <!-- Header -->
+    <section class="page-header">
+        <h1>📊 学习进度报告</h1>
+        <p class="page-subtitle">追踪你的双语学习进步</p>
+    </section>
+
+    <!-- Level Overview -->
+    <section class="level-overview">
+        <div class="level-card english">
+            <div class="level-header">
+                <span class="level-icon">🇬🇧</span>
+                <h3>英语水平</h3>
+            </div>
+            <div class="level-progress">
+                <div class="current-level">
+                    <span class="label">当前</span>
+                    <span class="value" id="currentEnglish">CET-4</span>
+                </div>
+                <div class="level-arrow">→</div>
+                <div class="target-level">
+                    <span class="label">目标</span>
+                    <span class="value" id="targetEnglish">CET-6+</span>
+                </div>
+            </div>
+            <div class="level-bar">
+                <div class="level-fill" id="englishLevelFill" style="width: 30%"></div>
+            </div>
+        </div>
+
+        <div class="level-card japanese">
+            <div class="level-header">
+                <span class="level-icon">🇯🇵</span>
+                <h3>日语水平</h3>
+            </div>
+            <div class="level-progress">
+                <div class="current-level">
+                    <span class="label">当前</span>
+                    <span class="value" id="currentJapanese">N5</span>
+                </div>
+                <div class="level-arrow">→</div>
+                <div class="target-level">
+                    <span class="label">目标</span>
+                    <span class="value" id="targetJapanese">N1+</span>
+                </div>
+            </div>
+            <div class="level-bar">
+                <div class="level-fill" id="japaneseLevelFill" style="width: 20%"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Grid -->
+    <section class="statistics-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-content">
+                <span class="stat-value" id="totalContent">0</span>
+                <span class="stat-label">已学内容</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-content">
+                <span class="stat-value" id="englishWords">0</span>
+                <span class="stat-label">英语词汇</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🈁</div>
+            <div class="stat-content">
+                <span class="stat-value" id="japaneseWords">0</span>
+                <span class="stat-label">日语词汇</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏰</div>
+            <div class="stat-content">
+                <span class="stat-value" id="dailyTime">60</span>
+                <span class="stat-label">每日分钟</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+        <div class="chart-card">
+            <h3>📈 技能分布</h3>
+            <canvas id="skillsChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>📊 每周学习时间</h3>
+            <canvas id="weeklyChart"></canvas>
+        </div>
+    </section>
+
+    <!-- Vocabulary Progress -->
+    <section class="vocabulary-section">
+        <h2>📖 词汇掌握进度</h2>
+        <div class="vocab-grid">
+            <div class="vocab-card english">
+                <h4>🇬🇧 英语词汇</h4>
+                <div class="vocab-stats">
+                    <div class="vocab-stat">
+                        <span class="count" id="engTotal">0</span>
+                        <span class="label">总词汇</span>
+                    </div>
+                    <div class="vocab-stat">
+                        <span class="count" id="engMastered">0</span>
+                        <span class="label">已掌握</span>
+                    </div>
+                    <div class="vocab-stat">
+                        <span class="count" id="engLearning">0</span>
+                        <span class="label">学习中</span>
+                    </div>
+                </div>
+                <div class="vocab-bar">
+                    <div class="vocab-fill mastered" id="engMasteredBar" style="width: 0%"></div>
+                    <div class="vocab-fill learning" id="engLearningBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="vocab-card japanese">
+                <h4>🇯🇵 日语词汇</h4>
+                <div class="vocab-stats">
+                    <div class="vocab-stat">
+                        <span class="count" id="jpnTotal">0</span>
+                        <span class="label">总词汇</span>
+                    </div>
+                    <div class="vocab-stat">
+                        <span class="count" id="jpnMastered">0</span>
+                        <span class="label">已掌握</span>
+                    </div>
+                    <div class="vocab-stat">
+                        <span class="count" id="jpnLearning">0</span>
+                        <span class="label">学习中</span>
+                    </div>
+                </div>
+                <div class="vocab-bar">
+                    <div class="vocab-fill mastered" id="jpnMasteredBar" style="width: 0%"></div>
+                    <div class="vocab-fill learning" id="jpnLearningBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Progress Containers -->
+    <div id="overall-progress" class="overall-progress-section">
+        <!-- Overall progress summary will be rendered here -->
+    </div>
+    
+    <div id="english-progress" class="language-progress-section">
+        <!-- English progress details will be rendered here -->
+    </div>
+    
+    <div id="japanese-progress" class="language-progress-section">
+        <!-- Japanese progress details will be rendered here -->
+    </div>
+    
+    <div id="vocabulary-stats" class="vocabulary-stats-section">
+        <!-- Enhanced vocabulary statistics will be rendered here -->
+    </div>
+    
+    <div id="learning-streak" class="learning-streak-section">
+        <!-- Learning streak visualization will be rendered here -->
+    </div>
+    
+    <div id="weakness-analysis" class="weakness-analysis-section">
+        <!-- Enhanced weakness analysis will be rendered here -->
+    </div>
+    
+    <div id="system-health" class="system-health-section">
+        <!-- System health indicators will be rendered here -->
+    </div>
+
+    <!-- Weakness Analysis -->
+    <section class="weakness-section">
+        <h2>🔍 弱点分析</h2>
+        <div class="weakness-grid" id="weaknessGrid">
+            <div class="loading">正在分析学习数据...</div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include enhanced progress visualization JavaScript -->
+<script src="{{ url_for('static', filename='js/progress.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Enhanced progress page functionality
+    let progressData = null;
+    let charts = {};
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add progress-page class for enhanced functionality
+        document.body.classList.add('progress-page');
+        
+        // Initialize enhanced progress visualization
+        if (window.ProgressVisualization) {
+            window.progressViz = new window.ProgressVisualization();
+        }
+        
+        loadReport();
+        initCharts();
+        
+        // Add refresh functionality
+        addRefreshControls();
+    });
+
+    function addRefreshControls() {
+        const header = document.querySelector('.page-header');
+        if (header) {
+            const refreshButton = document.createElement('button');
+            refreshButton.id = 'refresh-progress';
+            refreshButton.className = 'btn btn-secondary';
+            refreshButton.innerHTML = '🔄 刷新数据';
+            refreshButton.onclick = () => refreshAllData();
+            
+            const timeRangeSelect = document.createElement('select');
+            timeRangeSelect.id = 'time-range';
+            timeRangeSelect.className = 'form-select';
+            timeRangeSelect.innerHTML = `
+                <option value="week">本周</option>
+                <option value="month">本月</option>
+                <option value="quarter">本季度</option>
+                <option value="year">本年</option>
+            `;
+            
+            const controls = document.createElement('div');
+            controls.className = 'progress-controls';
+            controls.appendChild(timeRangeSelect);
+            controls.appendChild(refreshButton);
+            
+            header.appendChild(controls);
+        }
+    }
+
+    async function loadReport() {
+        try {
+            BilingualTutor.showToast('加载进度报告...', 'info', 1000);
+            
+            const response = await fetch('/api/progress/report');
+            const data = await response.json();
+
+            if (data.success) {
+                progressData = data.report;
+                updateProgressDisplay(progressData);
+                BilingualTutor.showToast('进度报告已更新', 'success');
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            console.error('Failed to load report:', error);
+            BilingualTutor.showToast('加载进度报告失败', 'error');
+            loadMockData();
+        }
+    }
+    
+    function updateProgressDisplay(report) {
+        // Update levels with enhanced animations
+        animateTextUpdate('currentEnglish', report.user_level?.english || 'CET-4');
+        animateTextUpdate('currentJapanese', report.user_level?.japanese || 'N5');
+        animateTextUpdate('targetEnglish', report.target_level?.english || 'CET-6+');
+        animateTextUpdate('targetJapanese', report.target_level?.japanese || 'N1+');
+
+        // Update level progress bars with animations
+        const englishProgress = calculateLevelProgress(report.user_level?.english, report.target_level?.english);
+        const japaneseProgress = calculateLevelProgress(report.user_level?.japanese, report.target_level?.japanese);
+        
+        animateProgressBar('englishLevelFill', englishProgress);
+        animateProgressBar('japaneseLevelFill', japaneseProgress);
+
+        // Update stats with enhanced counters
+        animateCounter('dailyTime', report.daily_time || 60);
+        animateCounter('totalContent', report.content_learned || 0);
+
+        // Update vocabulary with enhanced display
+        const engVocab = report.vocabulary_progress?.english || {};
+        const jpnVocab = report.vocabulary_progress?.japanese || {};
+
+        updateVocabularySection('english', engVocab);
+        updateVocabularySection('japanese', jpnVocab);
+
+        // Update weakness analysis with enhanced display
+        updateWeaknessGrid(report.weakness_analysis || {});
+        
+        // Update charts with new data
+        updateChartsData(report);
+    }
+    
+    function animateTextUpdate(elementId, newValue) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.style.transform = 'scale(1.1)';
+            element.style.transition = 'transform 0.3s ease';
+            element.textContent = newValue;
+            
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 300);
+        }
+    }
+    
+    function animateProgressBar(elementId, percentage) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.style.transition = 'width 1s ease-in-out';
+            element.style.width = percentage + '%';
+        }
+    }
+    
+    function animateCounter(elementId, targetValue) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        const startValue = parseInt(element.textContent) || 0;
+        const duration = 1000;
+        const startTime = performance.now();
+        
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+            element.textContent = currentValue;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            }
+        }
+        
+        requestAnimationFrame(updateCounter);
+    }
+    
+    function calculateLevelProgress(current, target) {
+        const levels = {
+            'english': ['CET-4', 'CET-5', 'CET-6', 'CET-6+'],
+            'japanese': ['N5', 'N4', 'N3', 'N2', 'N1', 'N1+']
+        };
+        
+        // Simple calculation - in production this would be more sophisticated
+        return Math.min(Math.random() * 80 + 20, 100);
+    }
+    
+    function updateVocabularySection(language, vocabData) {
+        const prefix = language === 'english' ? 'eng' : 'jpn';
+        
+        const total = vocabData.total_words || 0;
+        const mastered = vocabData.mastered || 0;
+        const learning = vocabData.learning || 0;
+        
+        // Update counters with animations
+        animateCounter(`${prefix}Total`, total);
+        animateCounter(`${prefix}Mastered`, mastered);
+        animateCounter(`${prefix}Learning`, learning);
+        
+        // Update word count in stats
+        if (language === 'english') {
+            animateCounter('englishWords', mastered);
+        } else {
+            animateCounter('japaneseWords', mastered);
+        }
+        
+        // Update progress bars
+        if (total > 0) {
+            const masteredPercent = (mastered / total) * 100;
+            const learningPercent = (learning / total) * 100;
+            
+            animateProgressBar(`${prefix}MasteredBar`, masteredPercent);
+            animateProgressBar(`${prefix}LearningBar`, learningPercent);
+        }
+    }
+
+    function updateWeaknessGrid(analysis) {
+        const grid = document.getElementById('weaknessGrid');
+
+        const englishWeakness = analysis.english || [];
+        const japaneseWeakness = analysis.japanese || [];
+
+        if (englishWeakness.length === 0 && japaneseWeakness.length === 0) {
+            grid.innerHTML = `
+                <div class="no-weakness enhanced-no-weakness">
+                    <div class="celebration-icon">🎉</div>
+                    <h3>表现优秀！</h3>
+                    <p>目前没有发现明显的薄弱环节，继续保持优秀的学习状态！</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+
+        if (englishWeakness.length > 0) {
+            html += `
+                <div class="weakness-card enhanced-weakness-card english">
+                    <div class="weakness-header">
+                        <span class="weakness-icon">🇬🇧</span>
+                        <h4>英语薄弱环节</h4>
+                    </div>
+                    <ul class="weakness-list">
+                        ${englishWeakness.map(w => `
+                            <li class="weakness-item">
+                                <span class="weakness-skill">${w.skill || w}</span>
+                                <span class="weakness-severity ${getSeverityClass(w.severity)}">${getSeverityText(w.severity)}</span>
+                                <p class="weakness-suggestion">${w.suggestion || '需要加强练习'}</p>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (japaneseWeakness.length > 0) {
+            html += `
+                <div class="weakness-card enhanced-weakness-card japanese">
+                    <div class="weakness-header">
+                        <span class="weakness-icon">🇯🇵</span>
+                        <h4>日语薄弱环节</h4>
+                    </div>
+                    <ul class="weakness-list">
+                        ${japaneseWeakness.map(w => `
+                            <li class="weakness-item">
+                                <span class="weakness-skill">${w.skill || w}</span>
+                                <span class="weakness-severity ${getSeverityClass(w.severity)}">${getSeverityText(w.severity)}</span>
+                                <p class="weakness-suggestion">${w.suggestion || '需要加强练习'}</p>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        grid.innerHTML = html || `
+            <div class="no-weakness">
+                <span class="icon">✨</span>
+                <p>暂无明显弱点！</p>
+            </div>
+        `;
+    }
+    
+    function getSeverityClass(severity) {
+        if (severity > 0.7) return 'high';
+        if (severity > 0.4) return 'medium';
+        return 'low';
+    }
+    
+    function getSeverityText(severity) {
+        if (severity > 0.7) return '需要重点关注';
+        if (severity > 0.4) return '需要加强';
+        return '轻微薄弱';
+    }
+
+    function initCharts() {
+        initSkillsChart();
+        initWeeklyChart();
+    }
+    
+    function initSkillsChart() {
+        const skillsCtx = document.getElementById('skillsChart');
+        if (!skillsCtx) return;
+        
+        charts.skills = new Chart(skillsCtx.getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: ['词汇', '语法', '阅读', '听力', '口语', '写作'],
+                datasets: [{
+                    label: '英语',
+                    data: [65, 59, 80, 70, 45, 55],
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                }, {
+                    label: '日语',
+                    data: [40, 35, 50, 45, 30, 40],
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    
+    function initWeeklyChart() {
+        const weeklyCtx = document.getElementById('weeklyChart');
+        if (!weeklyCtx) return;
+        
+        charts.weekly = new Chart(weeklyCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [{
+                    label: '英语 (分钟)',
+                    data: [30, 35, 25, 40, 30, 45, 35],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
+                }, {
+                    label: '日语 (分钟)',
+                    data: [20, 25, 35, 20, 30, 35, 25],
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        stacked: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: { 
+                        stacked: true, 
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 10
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateChartsData(report) {
+        // Update skills chart with real data if available
+        if (charts.skills && report.skills_analysis) {
+            const englishSkills = report.skills_analysis.english || [65, 59, 80, 70, 45, 55];
+            const japaneseSkills = report.skills_analysis.japanese || [40, 35, 50, 45, 30, 40];
+            
+            charts.skills.data.datasets[0].data = englishSkills;
+            charts.skills.data.datasets[1].data = japaneseSkills;
+            charts.skills.update('active');
+        }
+        
+        // Update weekly chart with real data if available
+        if (charts.weekly && report.weekly_study_time) {
+            const englishWeekly = report.weekly_study_time.english || [30, 35, 25, 40, 30, 45, 35];
+            const japaneseWeekly = report.weekly_study_time.japanese || [20, 25, 35, 20, 30, 35, 25];
+            
+            charts.weekly.data.datasets[0].data = englishWeekly;
+            charts.weekly.data.datasets[1].data = japaneseWeekly;
+            charts.weekly.update('active');
+        }
+    }
+    
+    function loadMockData() {
+        // Load mock data for demonstration
+        const mockReport = {
+            user_level: { english: 'CET-4', japanese: 'N5' },
+            target_level: { english: 'CET-6+', japanese: 'N1+' },
+            daily_time: 60,
+            content_learned: 45,
+            vocabulary_progress: {
+                english: { total_words: 500, mastered: 150, learning: 100 },
+                japanese: { total_words: 300, mastered: 80, learning: 60 }
+            },
+            weakness_analysis: {
+                english: [
+                    { skill: '听力理解', severity: 0.6, suggestion: '建议多听英语播客和新闻' }
+                ],
+                japanese: [
+                    { skill: '语法应用', severity: 0.5, suggestion: '需要加强语法练习' }
+                ]
+            }
+        };
+        
+        updateProgressDisplay(mockReport);
+        BilingualTutor.showToast('使用演示数据', 'info');
+    }
+    
+    async function refreshAllData() {
+        const refreshBtn = document.getElementById('refresh-progress');
+        if (refreshBtn) {
+            BilingualTutor.setLoadingState(refreshBtn, true, '刷新中...');
+        }
+        
+        await loadReport();
+        
+        if (refreshBtn) {
+            BilingualTutor.setLoadingState(refreshBtn, false);
+        }
+    }
+</script>
+{% endblock %}

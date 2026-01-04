@@ -1,0 +1,270 @@
+{
+  "version": "1.0",
+  "description": "爬虫内容源配置文件",
+  "last_updated": "2026-01-03",
+  
+  "crawler_settings": {
+    "timeout": 30,
+    "max_attempts": 3,
+    "min_delay": 1.0,
+    "max_delay": 3.0,
+    "enable_retry": true,
+    "enable_rate_limit": true,
+    "enable_user_agent_rotation": true
+  },
+  
+  "quality_thresholds": {
+    "min_educational_value": 0.7,
+    "min_source_reliability": 0.8,
+    "max_content_age_days": 365,
+    "min_overall_score": 0.65
+  },
+  
+  "english_sources": [
+    {
+      "name": "BBC Learning English",
+      "url": "https://www.bbc.com/learningenglish",
+      "type": "official",
+      "priority": 10,
+      "enabled": true,
+      "levels": ["CET-4", "CET-5", "CET-6", "TOEFL", "IELTS"],
+      "content_types": ["article", "news", "dialogue", "exercise"],
+      "update_frequency": "daily",
+      "language": "english",
+      "reliability": 0.95,
+      "vocabulary_patterns": [
+        "\\b[a-zA-Z]{3,}\\b",
+        "\\b[a-z]+(-[a-z]+)+\\b"
+      ],
+      "selectors": {
+        "title": "h1, h2, h3",
+        "content": "article, .article-body, .content",
+        "vocabulary": ".vocabulary, .word-list, .glossary"
+      }
+    },
+    {
+      "name": "VOA Learning English",
+      "url": "https://www.voanews.com/learningenglish",
+      "type": "official",
+      "priority": 9,
+      "enabled": true,
+      "levels": ["CET-4", "CET-5", "CET-6"],
+      "content_types": ["article", "news", "audio"],
+      "update_frequency": "daily",
+      "language": "english",
+      "reliability": 0.90,
+      "vocabulary_patterns": [
+        "\\b[a-zA-Z]{3,}\\b"
+      ],
+      "selectors": {
+        "title": "h1, .headline",
+        "content": "article, .story-content",
+        "vocabulary": ".vocabulary"
+      }
+    },
+    {
+      "name": "Cambridge Dictionary",
+      "url": "https://dictionary.cambridge.org",
+      "type": "educational",
+      "priority": 8,
+      "enabled": true,
+      "levels": ["CET-4", "CET-5", "CET-6", "TOEFL", "IELTS"],
+      "content_types": ["vocabulary", "definition", "example"],
+      "update_frequency": "weekly",
+      "language": "english",
+      "reliability": 0.98,
+      "vocabulary_patterns": [
+        "\\b[a-zA-Z]{3,}\\b"
+      ],
+      "selectors": {
+        "title": ".di-title, .pos-header",
+        "content": ".def-block, .examp",
+        "vocabulary": ".hw, .headword"
+      }
+    },
+    {
+      "name": "Oxford Learner's Dictionaries",
+      "url": "https://www.oxfordlearnersdictionaries.com",
+      "type": "educational",
+      "priority": 8,
+      "enabled": true,
+      "levels": ["CET-4", "CET-5", "CET-6", "TOEFL", "IELTS"],
+      "content_types": ["vocabulary", "definition", "example"],
+      "update_frequency": "weekly",
+      "language": "english",
+      "reliability": 0.98,
+      "vocabulary_patterns": [
+        "\\b[a-zA-Z]{3,}\\b"
+      ],
+      "selectors": {
+        "title": ".top-container, .headword",
+        "content": ".sense, .def",
+        "vocabulary": ".top-g, .headword"
+      }
+    }
+  ],
+  
+  "japanese_sources": [
+    {
+      "name": "NHK News Web Easy",
+      "url": "https://www3.nhk.or.jp/news/easy",
+      "type": "official",
+      "priority": 10,
+      "enabled": true,
+      "levels": ["N5", "N4"],
+      "content_types": ["news", "article"],
+      "update_frequency": "daily",
+      "language": "japanese",
+      "reliability": 0.95,
+      "vocabulary_patterns": [
+        "[\\u3040-\\u309F]+",
+        "[\\u30A0-\\u30FF]+",
+        "[\\u4E00-\\u9FAF]+"
+      ],
+      "selectors": {
+        "title": ".newsTitle, h1",
+        "content": ".article-body, .newsContent",
+        "vocabulary": ".vocabulary, .wordList"
+      }
+    },
+    {
+      "name": "NHK Easy Japanese Lessons",
+      "url": "https://www.nhk.or.jp/lesson",
+      "type": "official",
+      "priority": 10,
+      "enabled": true,
+      "levels": ["N5", "N4", "N3"],
+      "content_types": ["lesson", "dialogue", "exercise"],
+      "update_frequency": "weekly",
+      "language": "japanese",
+      "reliability": 0.95,
+      "vocabulary_patterns": [
+        "[\\u3040-\\u309F]+",
+        "[\\u30A0-\\u30FF]+",
+        "[\\u4E00-\\u9FAF]+"
+      ],
+      "selectors": {
+        "title": "h1, .lesson-title",
+        "content": ".lesson-body, .dialogue",
+        "vocabulary": ".vocabulary-list"
+      }
+    },
+    {
+      "name": "JLPT Official",
+      "url": "https://www.jlpt.jp",
+      "type": "official",
+      "priority": 9,
+      "enabled": true,
+      "levels": ["N5", "N4", "N3", "N2", "N1"],
+      "content_types": ["vocabulary", "grammar", "exercise"],
+      "update_frequency": "monthly",
+      "language": "japanese",
+      "reliability": 0.98,
+      "vocabulary_patterns": [
+        "[\\u3040-\\u309F]+",
+        "[\\u30A0-\\u30FF]+",
+        "[\\u4E00-\\u9FAF]+"
+      ],
+      "selectors": {
+        "title": "h1, h2, h3",
+        "content": ".content, .section",
+        "vocabulary": ".vocab-list"
+      }
+    },
+    {
+      "name": "Wasabi Japanese",
+      "url": "https://www.wasabi-jpn.com",
+      "type": "educational",
+      "priority": 8,
+      "enabled": true,
+      "levels": ["N5", "N4", "N3", "N2", "N1"],
+      "content_types": ["article", "grammar", "vocabulary"],
+      "update_frequency": "weekly",
+      "language": "japanese",
+      "reliability": 0.85,
+      "vocabulary_patterns": [
+        "[\\u3040-\\u309F]+",
+        "[\\u30A0-\\u30FF]+",
+        "[\\u4E00-\\u9FAF]+"
+      ],
+      "selectors": {
+        "title": "h1, .post-title",
+        "content": ".entry-content, .article-body",
+        "vocabulary": ".vocabulary"
+      }
+    }
+  ],
+  
+  "level_mappings": {
+    "english": {
+      "CET-4": {
+        "min_words": 4000,
+        "max_words": 5000,
+        "difficulty_score": 0.3
+      },
+      "CET-5": {
+        "min_words": 5000,
+        "max_words": 6000,
+        "difficulty_score": 0.5
+      },
+      "CET-6": {
+        "min_words": 6000,
+        "max_words": 7000,
+        "difficulty_score": 0.7
+      },
+      "TOEFL": {
+        "min_words": 8000,
+        "max_words": 10000,
+        "difficulty_score": 0.8
+      },
+      "IELTS": {
+        "min_words": 7000,
+        "max_words": 9000,
+        "difficulty_score": 0.8
+      }
+    },
+    "japanese": {
+      "N5": {
+        "min_words": 800,
+        "max_words": 1500,
+        "difficulty_score": 0.2
+      },
+      "N4": {
+        "min_words": 1500,
+        "max_words": 3000,
+        "difficulty_score": 0.4
+      },
+      "N3": {
+        "min_words": 3000,
+        "max_words": 6000,
+        "difficulty_score": 0.6
+      },
+      "N2": {
+        "min_words": 6000,
+        "max_words": 8000,
+        "difficulty_score": 0.8
+      },
+      "N1": {
+        "min_words": 10000,
+        "max_words": 15000,
+        "difficulty_score": 1.0
+      }
+    }
+  },
+  
+  "deduplication_settings": {
+    "enabled": true,
+    "dedup_by_word": true,
+    "dedup_by_url": true,
+    "dedup_by_content_hash": false,
+    "similarity_threshold": 0.95
+  },
+  
+  "incremental_update_settings": {
+    "enabled": true,
+    "check_last_modified": true,
+    "update_mode": "smart",
+    "max_age_days": 30,
+    "batch_size": 100
+  }
+}

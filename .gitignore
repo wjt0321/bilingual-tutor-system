@@ -1,0 +1,186 @@
+# 双语导师系统 .gitignore
+# 项目根目录配置
+
+# ==========================================
+# 忽略非项目文件夹
+# ==========================================
+
+# Kiro 和开发工具文件夹
+.kiro/
+.shared/
+.trae/
+.vscode/
+
+# 备份文件夹
+bilingual-tutor-system/
+bilingual-tutor-system-backup/
+
+# ==========================================
+# Python 相关
+# ==========================================
+
+# 字节码文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 分发 / 打包
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# 单元测试 / 覆盖率报告
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# 虚拟环境
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# 项目特定文件
+# ==========================================
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+learning.db
+*.db-shm
+*.db-wal
+
+# 日志文件
+*.log
+logs/
+debug.log
+error.log
+access.log
+audio_demo.log
+demo_log.txt
+demo_output.txt
+pytest_log.txt
+test_output.txt
+test_results.txt
+
+# 临时文件
+*.tmp
+*.temp
+temp/
+tmp/
+.cache/
+
+# 备份文件
+*.bak
+*.backup
+*.old
+backups/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 音频文件（如果很大）
+*.wav
+*.mp3
+*.ogg
+*.flac
+
+# ==========================================
+# 敏感配置和安全
+# ==========================================
+
+# 敏感配置文件
+config.json
+settings.json
+secrets.json
+credentials.json
+auth.json
+local.json
+
+# 环境变量文件
+.env.local
+.env.production
+.env.development
+.env.test
+
+# 缓存目录
+cache/
+
+# 上传和部署脚本（可能包含敏感路径）
+upload_*.bat
+upload_*.sh
+start_server.bat
+start_server.sh
+deploy_*.bat
+deploy_*.sh
+
+# ==========================================
+# 开发和测试文件
+# ==========================================
+
+# 临时开发文件
+demo.py
+debug_*.py
+diagnostic.py
+preview_*.py
+run_*.py
+system_validation.py
+test_db_manual.py
+view_*.py
+demo_*.py
+
+# HTML 预览文件
+ui_preview.html
+
+# 项目特定的临时文档
+PROJECT_PROGRESS.md
+PROJECT_STATUS.md
+UPLOAD_GUIDE.md
+UPLOAD_SUCCESS*.md
+
+# 备份文件夹
+bilingual-tutor-system-backup/

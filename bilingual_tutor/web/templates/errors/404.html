@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}页面未找到 - 双语导师系统{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-icon">🔍</div>
+        <h1>页面未找到</h1>
+        <p>抱歉，您访问的页面不存在或已被移动。</p>
+        <div class="error-actions">
+            <a href="{{ url_for('main.index') }}" class="btn-primary">返回首页</a>
+            <button onclick="history.back()" class="btn-secondary">返回上页</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+}
+
+.error-container {
+    max-width: 500px;
+    padding: var(--space-xl);
+}
+
+.error-icon {
+    font-size: 5rem;
+    margin-bottom: var(--space-lg);
+}
+
+.error-page h1 {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.error-page p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+    font-size: 1.125rem;
+}
+
+.error-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+</style>
+{% endblock %}

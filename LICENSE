@@ -1,0 +1,99 @@
+MIT License
+
+Copyright (c) 2026 双语导师系统 (Bilingual Tutor System)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+
+ADDITIONAL TERMS FOR WEB CRAWLING FUNCTIONALITY
+
+The web crawling functionality included in this software is subject to the 
+following additional terms and conditions:
+
+1. EDUCATIONAL USE ONLY: The web crawling features are intended solely for 
+   personal educational purposes. Commercial use of the crawling functionality 
+   is strictly prohibited.
+
+2. COMPLIANCE WITH WEBSITE TERMS: Users must comply with the robots.txt files, 
+   terms of service, and usage policies of all websites accessed through the 
+   crawling functionality.
+
+3. RESPECTFUL CRAWLING: Users must implement reasonable delays between requests 
+   and avoid overwhelming target websites with excessive traffic.
+
+4. COPYRIGHT RESPECT: Users must respect the intellectual property rights of 
+   content creators and website owners. The crawled content should not be 
+   redistributed without proper authorization.
+
+5. LIABILITY DISCLAIMER: The authors and contributors of this software are not 
+   responsible for any misuse of the crawling functionality or any legal 
+   consequences arising from such misuse.
+
+6. COMPLIANCE RESPONSIBILITY: It is the user's sole responsibility to ensure 
+   their use of the crawling functionality complies with all applicable laws, 
+   regulations, and website terms of service.
+
+By using the web crawling functionality of this software, you acknowledge that 
+you have read, understood, and agree to comply with these additional terms.
+
+================================================================================
+
+CHINESE TRANSLATION / 中文翻译
+
+MIT 许可证
+
+版权所有 (c) 2026 双语导师系统
+
+特此免费授予任何获得本软件副本和相关文档文件（"软件"）的人不受限制地
+处理该软件的权利，包括不受限制地使用、复制、修改、合并、发布、分发、
+再许可和/或出售该软件副本，以及允许拥有软件副本的人员这样做，须符合
+以下条件：
+
+上述版权声明和本许可声明应包含在该软件的所有副本或实质部分中。
+
+该软件按"原样"提供，不提供任何形式的明示或暗示的保证，包括但不限于对
+适销性、特定用途的适用性和非侵权的保证。在任何情况下，作者或版权持有人
+都不对任何索赔、损害或其他责任负责，无论这些追责来自合同、侵权或其它行为，
+还是产生于、源于或有关于本软件以及本软件的使用或其它处置。
+
+================================================================================
+
+网络爬虫功能附加条款
+
+本软件中包含的网络爬虫功能受以下附加条款和条件约束：
+
+1. 仅限教育用途：网络爬虫功能仅用于个人教育目的。严禁将爬虫功能用于
+   商业用途。
+
+2. 遵守网站条款：用户必须遵守通过爬虫功能访问的所有网站的robots.txt文件、
+   服务条款和使用政策。
+
+3. 文明爬取：用户必须在请求之间实施合理的延迟，避免过度流量压垮目标网站。
+
+4. 尊重版权：用户必须尊重内容创作者和网站所有者的知识产权。未经适当授权，
+   不得重新分发爬取的内容。
+
+5. 责任免责：本软件的作者和贡献者不对爬虫功能的任何误用或由此产生的任何
+   法律后果承担责任。
+
+6. 合规责任：确保使用爬虫功能符合所有适用的法律、法规和网站服务条款是
+   用户的唯一责任。
+
+通过使用本软件的网络爬虫功能，您确认已阅读、理解并同意遵守这些附加条款。

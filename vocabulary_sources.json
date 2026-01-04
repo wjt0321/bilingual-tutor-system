@@ -1,0 +1,34 @@
+{
+  "english_sources": {
+    "CET-4": {
+      "type": "file",
+      "path": "vocabulary_data/custom_english.json",
+      "format": "json",
+      "enabled": true,
+      "backup_builtin": true
+    },
+    "CET-6": {
+      "type": "file",
+      "path": "vocabulary_data/custom_english.json",
+      "format": "json",
+      "enabled": true,
+      "backup_builtin": true
+    }
+  },
+  "japanese_sources": {
+    "N5": {
+      "type": "file",
+      "path": "vocabulary_data/custom_japanese.json",
+      "format": "json",
+      "enabled": true,
+      "backup_builtin": true
+    },
+    "N4": {
+      "type": "file",
+      "path": "vocabulary_data/custom_japanese.json",
+      "format": "json",
+      "enabled": true,
+      "backup_builtin": true
+    }
+  }
+}

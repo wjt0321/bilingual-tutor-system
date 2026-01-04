@@ -1,0 +1,505 @@
+# 监控告警配置文件
+# Monitoring and Alerting Configuration
+
+# 监控系统配置
+monitoring:
+  # 基础配置
+  enabled: true
+  interval: 60  # 监控间隔（秒）
+  timeout: 30   # 超时时间（秒）
+  
+  # 数据收集
+  data_collection:
+    # 系统指标
+    system_metrics:
+      enabled: true
+      interval: 30
+      metrics:
+        - cpu_usage
+        - memory_usage
+        - disk_usage
+        - network_io
+        - process_count
+    
+    # 应用指标
+    application_metrics:
+      enabled: true
+      interval: 60
+      metrics:
+        - response_time
+        - request_count
+        - error_rate
+        - active_users
+        - database_connections
+        - cache_hit_rate
+    
+    # 业务指标
+    business_metrics:
+      enabled: true
+      interval: 300  # 5分钟
+      metrics:
+        - daily_active_users
+        - learning_sessions
+        - content_crawl_success
+        - ai_service_calls
+        - user_progress
+
+# 健康检查配置
+health_checks:
+  # Web应用健康检查
+  web_application:
+    enabled: true
+    endpoint: "/health"
+    method: "GET"
+    timeout: 10
+    interval: 30
+    expected_status: 200
+    expected_content: "healthy"
+  
+  # 数据库健康检查
+  database:
+    enabled: true
+    type: "sqlite"
+    timeout: 5
+    interval: 60
+    max_connections: 20
+    query: "SELECT 1"
+  
+  # 缓存健康检查
+  cache:
+    enabled: true
+    type: "redis"
+    timeout: 5
+    interval: 60
+    ping_test: true
+  
+  # AI服务健康检查
+  ai_service:
+    enabled: true
+    timeout: 30
+    interval: 300  # 5分钟
+    test_prompt: "Hello"
+    expected_response_time: 10  # 秒
+
+# 告警规则配置
+alerting:
+  # 全局告警设置
+  global:
+    enabled: true
+    cooldown: 300  # 告警冷却时间（秒）
+    max_alerts_per_hour: 10
+    
+  # 系统告警规则
+  system_alerts:
+    # CPU使用率告警
+    high_cpu_usage:
+      enabled: true
+      threshold: 80  # 百分比
+      duration: 300  # 持续时间（秒）
+      severity: "warning"
+      message: "CPU使用率过高: {value}%"
+    
+    critical_cpu_usage:
+      enabled: true
+      threshold: 95
+      duration: 60
+      severity: "critical"
+      message: "CPU使用率严重过高: {value}%"
+    
+    # 内存使用率告警
+    high_memory_usage:
+      enabled: true
+      threshold: 85
+      duration: 300
+      severity: "warning"
+      message: "内存使用率过高: {value}%"
+    
+    critical_memory_usage:
+      enabled: true
+      threshold: 95
+      duration: 60
+      severity: "critical"
+      message: "内存使用率严重过高: {value}%"
+    
+    # 磁盘使用率告警
+    high_disk_usage:
+      enabled: true
+      threshold: 80
+      duration: 600
+      severity: "warning"
+      message: "磁盘使用率过高: {value}%"
+    
+    critical_disk_usage:
+      enabled: true
+      threshold: 90
+      duration: 300
+      severity: "critical"
+      message: "磁盘使用率严重过高: {value}%"
+  
+  # 应用告警规则
+  application_alerts:
+    # 响应时间告警
+    slow_response_time:
+      enabled: true
+      threshold: 2.0  # 秒
+      duration: 180
+      severity: "warning"
+      message: "应用响应时间过慢: {value}秒"
+    
+    very_slow_response_time:
+      enabled: true
+      threshold: 5.0
+      duration: 60
+      severity: "critical"
+      message: "应用响应时间严重过慢: {value}秒"
+    
+    # 错误率告警
+    high_error_rate:
+      enabled: true
+      threshold: 5  # 百分比
+      duration: 300
+      severity: "warning"
+      message: "错误率过高: {value}%"
+    
+    critical_error_rate:
+      enabled: true
+      threshold: 10
+      duration: 60
+      severity: "critical"
+      message: "错误率严重过高: {value}%"
+    
+    # 数据库连接告警
+    high_db_connections:
+      enabled: true
+      threshold: 15
+      duration: 300
+      severity: "warning"
+      message: "数据库连接数过多: {value}"
+    
+    # 缓存命中率告警
+    low_cache_hit_rate:
+      enabled: true
+      threshold: 70  # 百分比
+      duration: 600
+      severity: "warning"
+      message: "缓存命中率过低: {value}%"
+  
+  # 服务可用性告警
+  availability_alerts:
+    # 服务不可用
+    service_down:
+      enabled: true
+      threshold: 1  # 连续失败次数
+      severity: "critical"
+      message: "服务不可用"
+    
+    # 数据库不可用
+    database_down:
+      enabled: true
+      threshold: 2
+      severity: "critical"
+      message: "数据库连接失败"
+    
+    # 缓存不可用
+    cache_down:
+      enabled: true
+      threshold: 3
+      severity: "warning"
+      message: "缓存服务不可用"
+    
+    # AI服务不可用
+    ai_service_down:
+      enabled: true
+      threshold: 2
+      severity: "warning"
+      message: "AI服务不可用"
+
+# 通知配置
+notifications:
+  # 邮件通知
+  email:
+    enabled: false
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: "${SMTP_PORT:-587}"
+    username: "${SMTP_USERNAME}"
+    password: "${SMTP_PASSWORD}"
+    from_address: "${ALERT_FROM_EMAIL}"
+    to_addresses:
+      - "${ADMIN_EMAIL}"
+    
+    # 邮件模板
+    templates:
+      warning: |
+        告警级别: 警告
+        告警时间: {timestamp}
+        告警内容: {message}
+        服务器: {hostname}
+        详细信息: {details}
+      
+      critical: |
+        告警级别: 严重
+        告警时间: {timestamp}
+        告警内容: {message}
+        服务器: {hostname}
+        详细信息: {details}
+        
+        请立即检查系统状态！
+  
+  # 日志通知
+  log:
+    enabled: true
+    log_file: "/app/logs/alerts.log"
+    log_level: "INFO"
+    format: "{timestamp} - {severity} - {message}"
+  
+  # 系统通知
+  system:
+    enabled: true
+    # Windows系统通知
+    windows_notification:
+      enabled: true
+      title: "双语导师系统告警"
+    
+    # Linux系统日志
+    syslog:
+      enabled: true
+      facility: "local0"
+      priority: "warning"
+  
+  # Webhook通知
+  webhook:
+    enabled: false
+    url: "${WEBHOOK_URL}"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer ${WEBHOOK_TOKEN}"
+    
+    payload_template: |
+      {
+        "alert_type": "{severity}",
+        "timestamp": "{timestamp}",
+        "message": "{message}",
+        "hostname": "{hostname}",
+        "service": "bilingual-tutor",
+        "details": {details}
+      }
+
+# 性能监控配置
+performance_monitoring:
+  # 响应时间监控
+  response_time:
+    enabled: true
+    endpoints:
+      - path: "/"
+        name: "主页"
+        threshold: 2.0
+      - path: "/learn"
+        name: "学习页面"
+        threshold: 3.0
+      - path: "/progress"
+        name: "进度页面"
+        threshold: 2.5
+      - path: "/api/content"
+        name: "内容API"
+        threshold: 1.5
+  
+  # 数据库性能监控
+  database_performance:
+    enabled: true
+    slow_query_threshold: 1.0  # 秒
+    connection_pool_monitoring: true
+    lock_monitoring: true
+  
+  # 缓存性能监控
+  cache_performance:
+    enabled: true
+    hit_rate_threshold: 80  # 百分比
+    memory_usage_threshold: 80
+    eviction_rate_threshold: 10  # 每分钟
+
+# 日志监控配置
+log_monitoring:
+  # 错误日志监控
+  error_logs:
+    enabled: true
+    log_files:
+      - "/app/logs/bilingual_tutor.log"
+      - "/app/logs/error.log"
+      - "/app/logs/gunicorn_error.log"
+    
+    # 错误模式匹配
+    error_patterns:
+      - pattern: "ERROR"
+        severity: "warning"
+        threshold: 5  # 5分钟内出现次数
+        window: 300
+      
+      - pattern: "CRITICAL"
+        severity: "critical"
+        threshold: 1
+        window: 60
+      
+      - pattern: "Exception"
+        severity: "warning"
+        threshold: 3
+        window: 300
+      
+      - pattern: "Database.*error"
+        severity: "critical"
+        threshold: 1
+        window: 60
+  
+  # 访问日志监控
+  access_logs:
+    enabled: true
+    log_files:
+      - "/app/logs/gunicorn_access.log"
+      - "/app/logs/nginx_access.log"
+    
+    # 异常访问模式
+    anomaly_patterns:
+      - pattern: "HTTP/1.1\" 5[0-9][0-9]"
+        name: "5xx错误"
+        threshold: 10
+        window: 300
+      
+      - pattern: "HTTP/1.1\" 4[0-9][0-9]"
+        name: "4xx错误"
+        threshold: 50
+        window: 300
+
+# 业务监控配置
+business_monitoring:
+  # 用户活动监控
+  user_activity:
+    enabled: true
+    metrics:
+      - name: "daily_active_users"
+        threshold_min: 1  # 最少日活用户
+        alert_if_below: true
+      
+      - name: "learning_sessions_per_day"
+        threshold_min: 5
+        alert_if_below: true
+      
+      - name: "average_session_duration"
+        threshold_min: 300  # 5分钟
+        alert_if_below: true
+  
+  # 内容质量监控
+  content_quality:
+    enabled: true
+    metrics:
+      - name: "content_crawl_success_rate"
+        threshold_min: 80  # 百分比
+        alert_if_below: true
+      
+      - name: "content_quality_score"
+        threshold_min: 0.7
+        alert_if_below: true
+  
+  # AI服务监控
+  ai_service_monitoring:
+    enabled: true
+    metrics:
+      - name: "ai_response_success_rate"
+        threshold_min: 95  # 百分比
+        alert_if_below: true
+      
+      - name: "ai_response_time"
+        threshold_max: 10  # 秒
+        alert_if_above: true
+
+# 报告配置
+reporting:
+  # 日报
+  daily_report:
+    enabled: true
+    time: "08:00"
+    timezone: "Asia/Shanghai"
+    recipients:
+      - "${ADMIN_EMAIL}"
+    
+    content:
+      - system_health_summary
+      - performance_metrics
+      - error_summary
+      - user_activity_stats
+  
+  # 周报
+  weekly_report:
+    enabled: true
+    day: "monday"
+    time: "09:00"
+    timezone: "Asia/Shanghai"
+    recipients:
+      - "${ADMIN_EMAIL}"
+    
+    content:
+      - weekly_performance_trend
+      - error_analysis
+      - user_growth_metrics
+      - system_optimization_suggestions
+  
+  # 月报
+  monthly_report:
+    enabled: true
+    day: 1
+    time: "10:00"
+    timezone: "Asia/Shanghai"
+    recipients:
+      - "${ADMIN_EMAIL}"
+    
+    content:
+      - monthly_performance_summary
+      - capacity_planning_report
+      - security_audit_summary
+      - business_metrics_analysis
+
+# 数据保留配置
+data_retention:
+  # 监控数据保留
+  metrics_data:
+    retention_days: 90
+    aggregation_rules:
+      - interval: "1h"
+        retention_days: 7
+      - interval: "1d"
+        retention_days: 30
+      - interval: "1w"
+        retention_days: 90
+  
+  # 告警历史保留
+  alert_history:
+    retention_days: 180
+  
+  # 日志数据保留
+  log_data:
+    retention_days: 30
+    compression: true
+
+# 维护模式配置
+maintenance_mode:
+  # 自动维护
+  auto_maintenance:
+    enabled: true
+    schedule: "0 3 * * 0"  # 每周日凌晨3点
+    
+    tasks:
+      - cleanup_old_logs
+      - optimize_database
+      - clear_expired_cache
+      - generate_performance_report
+  
+  # 维护窗口
+  maintenance_window:
+    start_time: "02:00"
+    end_time: "04:00"
+    timezone: "Asia/Shanghai"
+    
+    # 维护期间的监控调整
+    monitoring_adjustments:
+      disable_non_critical_alerts: true
+      increase_check_intervals: true
+      reduce_notification_frequency: true

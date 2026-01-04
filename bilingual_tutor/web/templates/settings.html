@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}设置 - 双语导师系统{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <section class="page-header">
+        <h1>⚙️ 学习设置</h1>
+        <p class="page-subtitle">个性化你的学习体验</p>
+    </section>
+
+    <div class="settings-container">
+        <!-- Profile Settings -->
+        <section class="settings-section">
+            <h2>👤 个人信息</h2>
+            <div class="settings-card">
+                <div class="setting-item">
+                    <label>用户名</label>
+                    <input type="text" id="username" value="{{ user_id }}" disabled>
+                </div>
+            </div>
+        </section>
+
+        <!-- Language Level Settings -->
+        <section class="settings-section">
+            <h2>📚 语言水平</h2>
+            <div class="settings-card">
+                <div class="setting-item">
+                    <label for="englishLevel">当前英语水平</label>
+                    <select id="englishLevel">
+                        <option value="CET-4">CET-4</option>
+                        <option value="CET-5">CET-5</option>
+                        <option value="CET-6">CET-6</option>
+                        <option value="CET-6+">CET-6+</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <label for="japaneseLevel">当前日语水平</label>
+                    <select id="japaneseLevel">
+                        <option value="N5">N5 (入门)</option>
+                        <option value="N4">N4</option>
+                        <option value="N3">N3</option>
+                        <option value="N2">N2</option>
+                        <option value="N1">N1</option>
+                        <option value="N1+">N1+</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Study Time Settings -->
+        <section class="settings-section">
+            <h2>⏰ 学习时间</h2>
+            <div class="settings-card">
+                <div class="setting-item">
+                    <label for="dailyTime">每日学习时间</label>
+                    <div class="range-container">
+                        <input type="range" id="dailyTime" min="30" max="120" value="60"
+                            oninput="updateTimeDisplay(this.value)">
+                        <span class="range-value" id="timeDisplay">60 分钟</span>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label>时间分配</label>
+                    <div class="time-distribution">
+                        <div class="dist-item">
+                            <span class="dist-icon">🔄</span>
+                            <span class="dist-label">复习</span>
+                            <span class="dist-value">20%</span>
+                        </div>
+                        <div class="dist-item">
+                            <span class="dist-icon">🇬🇧</span>
+                            <span class="dist-label">英语</span>
+                            <span class="dist-value">40%</span>
+                        </div>
+                        <div class="dist-item">
+                            <span class="dist-icon">🇯🇵</span>
+                            <span class="dist-label">日语</span>
+                            <span class="dist-value">40%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="settings-actions">
+            <button class="btn-secondary" onclick="resetSettings()">重置</button>
+            <button class="btn-primary" onclick="saveSettings()">保存设置</button>
+        </div>
+
+        <div class="settings-message" id="settingsMessage"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        loadCurrentSettings();
+    });
+
+    async function loadCurrentSettings() {
+        try {
+            const response = await fetch('/api/user/profile');
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('englishLevel').value = data.profile.english_level;
+                document.getElementById('japaneseLevel').value = data.profile.japanese_level;
+                document.getElementById('dailyTime').value = data.profile.daily_study_time;
+                updateTimeDisplay(data.profile.daily_study_time);
+            }
+        } catch (error) {
+            console.error('Failed to load settings:', error);
+        }
+    }
+
+    function updateTimeDisplay(value) {
+        document.getElementById('timeDisplay').textContent = value + ' 分钟';
+    }
+
+    async function saveSettings() {
+        const settings = {
+            english_level: document.getElementById('englishLevel').value,
+            japanese_level: document.getElementById('japaneseLevel').value,
+            daily_time: document.getElementById('dailyTime').value
+        };
+
+        try {
+            const response = await fetch('/api/settings/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+
+            const data = await response.json();
+            const msgEl = document.getElementById('settingsMessage');
+
+            if (data.success) {
+                msgEl.textContent = '✅ 设置已保存';
+                msgEl.className = 'settings-message success';
+            } else {
+                msgEl.textContent = '❌ 保存失败: ' + data.message;
+                msgEl.className = 'settings-message error';
+            }
+
+            setTimeout(() => { msgEl.textContent = ''; }, 3000);
+        } catch (error) {
+            console.error('Failed to save settings:', error);
+        }
+    }
+
+    function resetSettings() {
+        document.getElementById('englishLevel').value = 'CET-4';
+        document.getElementById('japaneseLevel').value = 'N5';
+        document.getElementById('dailyTime').value = 60;
+        updateTimeDisplay(60);
+    }
+</script>
+{% endblock %}

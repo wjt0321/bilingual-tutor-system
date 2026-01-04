@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "language": "english",
+    "level": "CET-4",
+    "description": "自定义英语词汇 - 你可以自由编辑此文件",
+    "version": "1.0"
+  },
+  "words": [
+    {
+      "word": "abandon",
+      "phonetic": "/əˈbændən/",
+      "meaning": "v. 放弃；抛弃",
+      "pos": "verb",
+      "example": "We had to abandon the car.",
+      "example_cn": "我们不得不放弃这辆车。"
+    },
+    {
+      "word": "ability",
+      "phonetic": "/əˈbɪləti/",
+      "meaning": "n. 能力",
+      "pos": "noun",
+      "example": "She has the ability to learn quickly.",
+      "example_cn": "她有快速学习的能力。"
+    },
+    {
+      "word": "abnormal",
+      "phonetic": "/æbˈnɔːrml/",
+      "meaning": "adj. 反常的",
+      "pos": "adjective",
+      "example": "This is an abnormal situation.",
+      "example_cn": "这是一个反常的情况。"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "language": "japanese",
+    "level": "N5",
+    "description": "自定义日语词汇 - 你可以自由编辑此文件",
+    "version": "1.0"
+  },
+  "words": [
+    {
+      "word": "あい",
+      "reading": "愛",
+      "meaning": "n. 爱",
+      "pos": "名詞",
+      "example": "愛は大切です。",
+      "example_cn": "爱很重要。"
+    },
+    {
+      "word": "あいだ",
+      "reading": "間",
+      "meaning": "n. 之间",
+      "pos": "名詞",
+      "example": "東京と大阪の間です。",
+      "example_cn": "在东京和大阪之间。"
+    },
+    {
+      "word": "あう",
+      "reading": "会う",
+      "meaning": "v. 见面",
+      "pos": "動詞",
+      "example": "友達に会います。",
+      "example_cn": "和朋友见面。"
+    }
+  ]
+}

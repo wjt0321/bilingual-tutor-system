@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 双语导师系统</title>
+    <meta name="description" content="登录双语导师系统，开始您的个性化语言学习之旅">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo" role="img" aria-label="双语导师系统图标">📚</div>
+                <h1>双语导师系统</h1>
+                <p class="auth-subtitle">Bilingual Tutor System</p>
+            </div>
+
+            <form id="loginForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" placeholder="请输入用户名" required
+                        autocomplete="username" aria-describedby="username-error">
+                    <div id="username-error" class="field-error" role="alert"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" placeholder="请输入密码" required
+                        autocomplete="current-password" aria-describedby="password-error">
+                    <div id="password-error" class="field-error" role="alert"></div>
+                </div>
+
+                <div class="form-error" id="errorMsg" role="alert" aria-live="polite"></div>
+
+                <button type="submit" class="btn-primary btn-full" id="loginBtn">
+                    登 录
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>还没有账号？<a href="{{ url_for('main.register_page') }}">立即注册</a></p>
+            </div>
+        </div>
+
+        <div class="auth-features">
+            <h2>开始你的语言学习之旅</h2>
+            <ul>
+                <li>🇬🇧 英语学习：CET-4 → CET-6+</li>
+                <li>🇯🇵 日语学习：N5 → N1+</li>
+                <li>⏰ 每日60分钟高效学习</li>
+                <li>📊 智能进度跟踪</li>
+                <li>🧠 科学复习机制</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+
+            // Clear errors when user starts typing
+            usernameField.addEventListener('input', () => clearFieldError('username'));
+            passwordField.addEventListener('input', () => clearFieldError('password'));
+
+            function clearFieldError(fieldName) {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                if (errorElement) {
+                    errorElement.textContent = '';
+                }
+                errorMsg.textContent = '';
+            }
+
+            function showFieldError(fieldName, message) {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                if (errorElement) {
+                    errorElement.textContent = message;
+                }
+            }
+
+            function validateForm() {
+                let isValid = true;
+
+                // Clear previous errors
+                clearFieldError('username');
+                clearFieldError('password');
+                errorMsg.textContent = '';
+
+                // Validate username
+                const username = usernameField.value.trim();
+                if (!username) {
+                    showFieldError('username', '请输入用户名');
+                    isValid = false;
+                } else if (username.length < 3) {
+                    showFieldError('username', '用户名长度至少3位');
+                    isValid = false;
+                }
+
+                // Validate password
+                const password = passwordField.value;
+                if (!password) {
+                    showFieldError('password', '请输入密码');
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showFieldError('password', '密码长度至少6位');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            loginForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                if (!validateForm()) {
+                    return;
+                }
+
+                const username = usernameField.value.trim();
+                const password = passwordField.value;
+
+                // Set loading state
+                BilingualTutor.setLoadingState(loginBtn, true, '登录中...');
+
+                try {
+                    const data = await BilingualTutor.apiRequest('/api/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    if (data.success) {
+                        BilingualTutor.showToast('登录成功！', 'success');
+                        // Small delay to show success message
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 1000);
+                    } else {
+                        errorMsg.textContent = data.message || '登录失败';
+                        // Focus back to username field for retry
+                        usernameField.focus();
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    errorMsg.textContent = '登录失败，请检查网络连接';
+                } finally {
+                    BilingualTutor.setLoadingState(loginBtn, false);
+                }
+            });
+
+            // Focus username field on page load
+            usernameField.focus();
+        });
+    </script>
+
+    <style>
+        .field-error {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: var(--space-xs);
+            min-height: 1.2rem;
+        }
+
+        .form-group input:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--error);
+        }
+
+        .form-group input:valid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--success);
+        }
+    </style>
+</body>
+
+</html>

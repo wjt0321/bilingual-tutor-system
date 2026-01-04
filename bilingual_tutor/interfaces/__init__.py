@@ -1,0 +1,1 @@
+"""Chinese interface layer for user interactions."""

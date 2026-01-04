@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 双语导师系统{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <h1>欢迎回来，<span id="userName">{{ user_id }}</span>！</h1>
+            <p class="welcome-subtitle">今天是学习的好日子，让我们开始吧！</p>
+        </div>
+        <div class="quick-stats" id="quickStats">
+            <div class="stat-card">
+                <span class="stat-icon">🇬🇧</span>
+                <span class="stat-label">英语水平</span>
+                <span class="stat-value" id="englishLevel">--</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🇯🇵</span>
+                <span class="stat-label">日语水平</span>
+                <span class="stat-value" id="japaneseLevel">--</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⏰</span>
+                <span class="stat-label">每日时间</span>
+                <span class="stat-value" id="dailyTime">-- 分钟</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Today's Plan Section -->
+    <section class="today-plan">
+        <div class="section-header">
+            <h2>📋 今日学习计划</h2>
+            <button class="btn-primary" onclick="startLearning()">开始学习</button>
+        </div>
+
+        <div class="plan-overview" id="planOverview">
+            <div class="time-allocation">
+                <div class="time-block review">
+                    <span class="time-icon">🔄</span>
+                    <span class="time-label">复习</span>
+                    <span class="time-value" id="reviewTime">-- 分钟</span>
+                </div>
+                <div class="time-block english">
+                    <span class="time-icon">🇬🇧</span>
+                    <span class="time-label">英语</span>
+                    <span class="time-value" id="englishTime">-- 分钟</span>
+                </div>
+                <div class="time-block japanese">
+                    <span class="time-icon">🇯🇵</span>
+                    <span class="time-label">日语</span>
+                    <span class="time-value" id="japaneseTime">-- 分钟</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="activities-list" id="activitiesList">
+            <!-- Activities will be loaded dynamically -->
+            <div class="loading">正在加载学习计划...</div>
+        </div>
+
+        <div class="objectives-section">
+            <h3>📚 今日学习目标</h3>
+            <ul class="objectives-list" id="objectivesList">
+                <!-- Objectives will be loaded dynamically -->
+            </ul>
+        </div>
+    </section>
+
+    <!-- Progress Overview -->
+    <section class="progress-overview">
+        <div class="section-header">
+            <h2>📊 学习进度概览</h2>
+            <a href="{{ url_for('main.progress_page') }}" class="btn-secondary">查看详情</a>
+        </div>
+
+        <div class="progress-cards">
+            <div class="progress-card">
+                <h4>英语词汇</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="englishVocabProgress" style="width: 0%"></div>
+                </div>
+                <span class="progress-text" id="englishVocabText">已掌握 0 个</span>
+            </div>
+            <div class="progress-card">
+                <h4>日语词汇</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="japaneseVocabProgress" style="width: 0%"></div>
+                </div>
+                <span class="progress-text" id="japaneseVocabText">已掌握 0 个</span>
+            </div>
+            <div class="progress-card">
+                <h4>学习内容</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="contentProgress" style="width: 0%"></div>
+                </div>
+                <span class="progress-text" id="contentText">已学习 0 个</span>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include enhanced JavaScript modules -->
+<script src="{{ url_for('static', filename='js/progress.js') }}"></script>
+
+<script>
+    // Enhanced dashboard functionality
+    class DashboardManager {
+        constructor() {
+            this.progressViz = null;
+            this.init();
+        }
+        
+        init() {
+            this.loadUserProfile();
+            this.loadLearningPlan();
+            this.loadProgress();
+            this.initProgressVisualization();
+        }
+        
+        initProgressVisualization() {
+            // Initialize mini progress visualization for dashboard
+            this.progressViz = new ProgressVisualization();
+        }
+
+        async loadUserProfile() {
+            try {
+                const profile = await BilingualTutor.loadUserProfile();
+                if (profile) {
+                    BilingualTutor.setText('englishLevel', profile.english_level);
+                    BilingualTutor.setText('japaneseLevel', profile.japanese_level);
+                    BilingualTutor.setText('dailyTime', profile.daily_study_time + ' 分钟');
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+                BilingualTutor.showToast('加载用户资料失败', 'error');
+            }
+        }
+
+        async loadLearningPlan() {
+            try {
+                const plan = await BilingualTutor.loadLearningPlan();
+                if (plan) {
+                    // Update time allocation with enhanced animations
+                    this.animateTimeUpdate('reviewTime', plan.review_time + ' 分钟');
+                    this.animateTimeUpdate('englishTime', plan.english_time + ' 分钟');
+                    this.animateTimeUpdate('japaneseTime', plan.japanese_time + ' 分钟');
+
+                    // Update activities list with enhanced cards
+                    const activitiesList = document.getElementById('activitiesList');
+                    if (plan.activities && plan.activities.length > 0) {
+                        activitiesList.innerHTML = plan.activities.map((activity, index) => `
+                            <div class="activity-card enhanced-card" data-id="${activity.id}">
+                                <div class="activity-number">${index + 1}</div>
+                                <div class="activity-info">
+                                    <span class="activity-type ${activity.language}">${activity.language_display}</span>
+                                    <span class="activity-name">${BilingualTutor.getActivityTypeName(activity.type)}</span>
+                                    <span class="activity-difficulty">${this.getDifficultyText(activity.difficulty)}</span>
+                                </div>
+                                <div class="activity-meta">
+                                    <div class="activity-duration">⏱️ ${activity.duration} 分钟</div>
+                                    <div class="activity-points">🎯 ${activity.estimated_points || 10} 分</div>
+                                </div>
+                                <div class="activity-status pending">待完成</div>
+                            </div>
+                        `).join('');
+                        
+                        // Add click handlers for enhanced interaction
+                        this.bindActivityCardEvents();
+                    } else {
+                        activitiesList.innerHTML = '<div class="loading">暂无学习活动</div>';
+                    }
+
+                    // Update objectives with progress indicators
+                    const objectivesList = document.getElementById('objectivesList');
+                    if (plan.objectives && plan.objectives.length > 0) {
+                        objectivesList.innerHTML = plan.objectives.map((obj, index) => `
+                            <li class="objective-item">
+                                <span class="objective-icon">📌</span>
+                                <span class="objective-text">${obj}</span>
+                                <span class="objective-progress">0%</span>
+                            </li>
+                        `).join('');
+                    } else {
+                        objectivesList.innerHTML = '<li class="objective-item">今日暂无特定目标</li>';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load plan:', error);
+                document.getElementById('activitiesList').innerHTML = '<div class="error">加载失败，请刷新页面</div>';
+            }
+        }
+
+        async loadProgress() {
+            try {
+                const progress = await BilingualTutor.loadProgress();
+                if (progress) {
+                    const vocab = progress.vocabulary || {};
+                    const content = progress.content_history || {};
+
+                    // Update English vocabulary with enhanced animations
+                    const engMastered = vocab.english?.mastered || 0;
+                    const engTotal = vocab.english?.total || 100;
+                    const engProgress = Math.min((engMastered / engTotal) * 100, 100);
+                    
+                    BilingualTutor.setText('englishVocabText', `已掌握 ${engMastered}/${engTotal} 个`);
+                    this.animateProgressBar('englishVocabProgress', engProgress);
+
+                    // Update Japanese vocabulary with enhanced animations
+                    const jpnMastered = vocab.japanese?.mastered || 0;
+                    const jpnTotal = vocab.japanese?.total || 100;
+                    const jpnProgress = Math.min((jpnMastered / jpnTotal) * 100, 100);
+                    
+                    BilingualTutor.setText('japaneseVocabText', `已掌握 ${jpnMastered}/${jpnTotal} 个`);
+                    this.animateProgressBar('japaneseVocabProgress', jpnProgress);
+
+                    // Update content learned with enhanced display
+                    const contentCount = content.total_content_seen || 0;
+                    const contentTarget = content.daily_target || 10;
+                    const contentProgress = Math.min((contentCount / contentTarget) * 100, 100);
+                    
+                    BilingualTutor.setText('contentText', `已学习 ${contentCount}/${contentTarget} 个`);
+                    this.animateProgressBar('contentProgress', contentProgress);
+                }
+            } catch (error) {
+                console.error('Failed to load progress:', error);
+            }
+        }
+        
+        animateTimeUpdate(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.transform = 'scale(1.1)';
+                element.style.transition = 'transform 0.3s ease';
+                BilingualTutor.setText(elementId, newValue);
+                
+                setTimeout(() => {
+                    element.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+        
+        animateProgressBar(elementId, percentage) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.transition = 'width 1s ease-in-out';
+                BilingualTutor.updateProgressBar(elementId, percentage);
+            }
+        }
+        
+        getDifficultyText(difficulty) {
+            const levels = {
+                'easy': '简单',
+                'medium': '中等',
+                'hard': '困难'
+            };
+            return levels[difficulty] || '中等';
+        }
+        
+        bindActivityCardEvents() {
+            const activityCards = document.querySelectorAll('.activity-card');
+            activityCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('.activity-status')) {
+                        this.previewActivity(card.dataset.id);
+                    }
+                });
+                
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                    card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                });
+            });
+        }
+        
+        previewActivity(activityId) {
+            // Show activity preview modal or navigate to activity
+            BilingualTutor.showToast(`预览活动 ${activityId}`, 'info');
+        }
+    }
+
+    // Initialize dashboard when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        window.dashboardManager = new DashboardManager();
+    });
+
+    function startLearning() {
+        BilingualTutor.navigateTo('/learn');
+    }
+</script>
+{% endblock %}

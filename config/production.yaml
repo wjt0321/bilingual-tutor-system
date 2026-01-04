@@ -1,0 +1,292 @@
+# 生产环境配置文件
+# Production Environment Configuration
+# 
+# ⚠️ 重要声明: 本配置文件仅用于个人学习系统部署
+# 严禁用于任何商业用途或企业级部署
+# 配置中的所有参数均为个人学习系统设计
+# 
+# 🚫 禁止商业使用: 本配置不得用于商业系统部署
+# 🎓 仅限个人学习: 配置仅支持个人语言学习功能
+# ⚖️ 法律责任: 违规使用后果自负
+
+# 应用程序配置
+app:
+  name: "双语导师系统"
+  version: "1.0.0"
+  environment: "production"
+  debug: false
+  secret_key: "${SECRET_KEY}"  # 从环境变量获取
+  host: "0.0.0.0"
+  port: 5000
+  workers: 4  # Gunicorn worker 进程数
+
+# 数据库配置
+database:
+  type: "sqlite"
+  path: "/app/data/learning.db"
+  backup_path: "/app/backups/"
+  backup_interval: 86400  # 24小时备份一次
+  connection_pool_size: 20
+  timeout: 30
+  
+  # 数据库优化设置
+  pragma:
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    cache_size: 10000
+    temp_store: "MEMORY"
+
+# 缓存配置
+cache:
+  type: "redis"
+  host: "${REDIS_HOST:-localhost}"
+  port: "${REDIS_PORT:-6379}"
+  db: "${REDIS_DB:-0}"
+  password: "${REDIS_PASSWORD}"
+  max_connections: 50
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  retry_on_timeout: true
+  
+  # 缓存策略
+  default_ttl: 3600  # 1小时
+  session_ttl: 86400  # 24小时
+  content_ttl: 7200   # 2小时
+  user_data_ttl: 1800 # 30分钟
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # 文件日志
+  file:
+    enabled: true
+    path: "/app/logs/"
+    filename: "bilingual_tutor.log"
+    max_size: "100MB"
+    backup_count: 10
+    rotation: "daily"
+  
+  # 控制台日志
+  console:
+    enabled: true
+    level: "WARNING"
+  
+  # 错误日志
+  error:
+    enabled: true
+    path: "/app/logs/"
+    filename: "error.log"
+    level: "ERROR"
+
+# 安全配置
+security:
+  # 密码加密
+  password_hash_rounds: 12
+  
+  # 会话安全
+  session_cookie_secure: true
+  session_cookie_httponly: true
+  session_cookie_samesite: "Lax"
+  
+  # CSRF保护
+  csrf_enabled: true
+  csrf_token_timeout: 3600
+  
+  # 速率限制
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+    requests_per_hour: 1000
+  
+  # 数据加密
+  encryption_key: "${ENCRYPTION_KEY}"
+
+# AI服务配置
+ai_service:
+  # 主要服务商
+  primary_provider: "deepseek"
+  
+  # DeepSeek配置
+  deepseek:
+    api_key: "${DEEPSEEK_API_KEY}"
+    base_url: "https://api.deepseek.com"
+    model: "deepseek-chat"
+    timeout: 30
+    max_retries: 3
+  
+  # 备用服务商
+  fallback_providers:
+    - name: "zhipu"
+      api_key: "${ZHIPU_API_KEY}"
+      base_url: "https://open.bigmodel.cn/api/paas/v4/"
+      model: "glm-4"
+    
+    - name: "baichuan"
+      api_key: "${BAICHUAN_API_KEY}"
+      base_url: "https://api.baichuan-ai.com/v1/"
+      model: "Baichuan2-Turbo"
+  
+  # 请求配置
+  max_tokens: 2000
+  temperature: 0.7
+  timeout: 30
+  retry_delay: 1
+
+# 内容爬取配置
+content_crawler:
+  # 爬取间隔
+  refresh_interval: 86400  # 24小时
+  
+  # 并发设置
+  max_concurrent_requests: 5
+  request_delay: 1  # 秒
+  
+  # 超时设置
+  request_timeout: 30
+  
+  # 用户代理
+  user_agent: "BilingualTutor/1.0 (+https://example.com/bot)"
+  
+  # 内容质量阈值
+  quality_threshold: 0.7
+  
+  # 存储设置
+  max_content_age: 2592000  # 30天
+  max_content_per_level: 1000
+
+# 监控配置
+monitoring:
+  # 健康检查
+  health_check:
+    enabled: true
+    endpoint: "/health"
+    interval: 60  # 秒
+  
+  # 性能监控
+  performance:
+    enabled: true
+    sample_rate: 0.1  # 10%采样
+    slow_query_threshold: 1.0  # 秒
+  
+  # 错误监控
+  error_tracking:
+    enabled: true
+    sample_rate: 1.0  # 100%采样
+  
+  # 指标收集
+  metrics:
+    enabled: true
+    endpoint: "/metrics"
+    include_system_metrics: true
+
+# 备份配置
+backup:
+  # 数据库备份
+  database:
+    enabled: true
+    schedule: "0 2 * * *"  # 每天凌晨2点
+    retention_days: 30
+    compression: true
+  
+  # 日志备份
+  logs:
+    enabled: true
+    schedule: "0 3 * * 0"  # 每周日凌晨3点
+    retention_weeks: 12
+    compression: true
+  
+  # 配置备份
+  config:
+    enabled: true
+    schedule: "0 4 * * 0"  # 每周日凌晨4点
+    retention_months: 6
+
+# 性能优化
+performance:
+  # 连接池
+  connection_pool:
+    max_size: 20
+    min_size: 5
+    timeout: 30
+  
+  # 缓存预热
+  cache_warmup:
+    enabled: true
+    on_startup: true
+    popular_content_limit: 100
+  
+  # 静态文件
+  static_files:
+    cache_timeout: 86400  # 24小时
+    compression: true
+    etag: true
+  
+  # 数据库优化
+  database_optimization:
+    query_cache: true
+    index_optimization: true
+    vacuum_schedule: "0 1 * * 0"  # 每周日凌晨1点
+
+# 通知配置
+notifications:
+  # 邮件通知
+  email:
+    enabled: false
+    smtp_host: "${SMTP_HOST}"
+    smtp_port: "${SMTP_PORT:-587}"
+    smtp_user: "${SMTP_USER}"
+    smtp_password: "${SMTP_PASSWORD}"
+    from_address: "${FROM_EMAIL}"
+  
+  # 系统通知
+  system:
+    enabled: true
+    log_errors: true
+    alert_threshold: 10  # 10个错误后发送警报
+
+# 部署配置
+deployment:
+  # 容器配置
+  container:
+    image: "bilingual-tutor:latest"
+    restart_policy: "always"
+    memory_limit: "2g"
+    cpu_limit: "1.0"
+  
+  # 健康检查
+  health_check:
+    test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+    interval: "30s"
+    timeout: "10s"
+    retries: 3
+    start_period: "40s"
+  
+  # 环境变量
+  environment:
+    - "FLASK_ENV=production"
+    - "PYTHONPATH=/app"
+    - "TZ=Asia/Shanghai"
+
+# 维护配置
+maintenance:
+  # 维护窗口
+  window:
+    enabled: false
+    start_time: "02:00"
+    end_time: "04:00"
+    timezone: "Asia/Shanghai"
+  
+  # 自动更新
+  auto_update:
+    enabled: false
+    schedule: "0 3 * * 1"  # 每周一凌晨3点
+    backup_before_update: true
+  
+  # 清理任务
+  cleanup:
+    temp_files: true
+    old_logs: true
+    expired_cache: true
+    schedule: "0 5 * * *"  # 每天凌晨5点
